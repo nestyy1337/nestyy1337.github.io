@@ -1,0 +1,11 @@
+[[projects]]
+name = "serde_rison"
+description = "Serde support for RISON, a compact format for structured data in URLs."
+repository = "https://github.com/nestyy1337/serde_rison"
+documentation = "https://docs.rs/serde_rison"
+
+[[projects]]
+name = "sdp-request-client"
+description = "An async Rust client for the ManageEngine ServiceDesk Plus API."
+repository = "https://github.com/nestyy1337/sdp-request-client"
+documentation = "https://docs.rs/sdp-request-client"

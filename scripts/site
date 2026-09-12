@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$root"
+
+zola="${ZOLA_BIN:-$root/.tools/zola}"
+if [[ ! -x "$zola" ]]; then
+  zola="$(command -v zola || true)"
+fi
+
+if [[ -z "$zola" || ! -x "$zola" ]]; then
+  printf 'Install Zola %s or set ZOLA_BIN. See README.md.\n' "$(cat .zola-version)" >&2
+  exit 1
+fi
+
+expected="zola $(cat .zola-version)"
+if [[ "$("$zola" --version)" != "$expected" ]]; then
+  printf 'Expected %s. Refusing to use another version.\n' "$expected" >&2
+  exit 1
+fi
+
+base_url="${SITE_BASE_URL:-$(python3 -c 'import tomllib; print(tomllib.load(open("zola.toml", "rb"))["base_url"])')}"
+
+build() {
+  "$zola" build --base-url "$base_url"
+  python3 scripts/check_output.py public "$base_url"
+}
+
+case "${1:-preview}" in
+  preview)
+    exec "$zola" serve --drafts --output-dir .preview --force --extra-watch-path data --port "${PORT:-1111}"
+    ;;
+  serve)
+    exec "$zola" serve --output-dir .preview --force --extra-watch-path data --port "${PORT:-1111}"
+    ;;
+  check)
+    "$zola" check --skip-external-links
+    build
+    python3 scripts/check_articles.py "$zola"
+    node --test scripts/browser.test.cjs
+    ;;
+  build)
+    build
+    ;;
+  *)
+    printf 'Usage: ./scripts/site [preview|serve|check|build]\n' >&2
+    exit 2
+    ;;
+esac

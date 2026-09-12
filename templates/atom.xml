@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="{{ lang }}">
+  <title>{{ config.title }}</title>
+  <subtitle>{{ config.description }}</subtitle>
+  <link rel="self" type="application/atom+xml" href="{{ feed_url }}"/>
+  <link rel="alternate" type="text/html" href="{{ config.base_url }}"/>
+  <id>{{ feed_url }}</id>
+  <updated>{% if last_updated %}{{ last_updated | date(format="%Y-%m-%dT%H:%M:%S%:z") }}{% else %}{{ config.extra.feed_created }}{% endif %}</updated>
+  <author><name>{{ config.author }}</name></author>
+  {% for page in pages %}
+  <entry>
+    <title>{{ page.title }}</title>
+    <link rel="alternate" type="text/html" href="{{ page.permalink }}"/>
+    <id>{{ page.permalink }}</id>
+    <published>{{ page.date | date(format="%Y-%m-%dT%H:%M:%S%:z") }}</published>
+    <updated>{% if page.updated %}{{ page.updated | date(format="%Y-%m-%dT%H:%M:%S%:z") }}{% else %}{{ page.date | date(format="%Y-%m-%dT%H:%M:%S%:z") }}{% endif %}</updated>
+    <content type="html" xml:base="{{ page.permalink }}">{{ page.content }}</content>
+  </entry>
+  {% endfor %}
+</feed>

@@ -1,0 +1,52 @@
+{% set metadata_title = config.title %}
+{% set metadata_description = config.description %}
+{% if page %}
+  {% set metadata_title = page.title ~ " · " ~ config.title %}
+  {% set metadata_description = page.description | default(value=config.description) %}
+{% elif term %}
+  {% set metadata_title = term.name ~ " · " ~ config.title %}
+{% elif taxonomy %}
+  {% set metadata_title = "Tags · " ~ config.title %}
+{% elif section and section.title %}
+  {% set metadata_title = section.title ~ " · " ~ config.title %}
+  {% set metadata_description = section.description | default(value=config.description) %}
+{% endif %}
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{% block description %}{{ metadata_description }}{% endblock description %}">
+  <meta property="og:title" content="{{ metadata_title }}">
+  <meta property="og:description" content="{{ metadata_description }}">
+  <meta property="og:type" content="{% if page and page.date %}article{% else %}website{% endif %}">
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta name="twitter:card" content="summary">
+  {% if config.mode == "serve" %}<meta name="robots" content="noindex, nofollow">{% endif %}
+  {% if current_url %}
+  <link rel="canonical" href="{{ current_url }}">
+  <meta property="og:url" content="{{ current_url }}">
+  {% endif %}
+  <link rel="icon" href="{{ get_url(path='favicon.svg') }}" type="image/svg+xml">
+  <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/site.css') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/layout.css') }}">
+  <link id="syntax-light" rel="stylesheet" href="{{ get_url(path='giallo-light.css') }}" media="(prefers-color-scheme: light)">
+  <link id="syntax-dark" rel="stylesheet" href="{{ get_url(path='giallo-dark.css') }}" media="(prefers-color-scheme: dark)">
+  {% block head %}{% endblock head %}
+  <script src="{{ get_url(path='js/theme.js') }}"></script>
+</head>
+<body>
+  <a class="skip-link" href="{% block skip_target %}#main{% endblock skip_target %}">Skip to content</a>
+  {% block body %}
+  <div class="site-layout">
+    {{ <site_header /> }}
+    <main id="main" class="site-main" tabindex="-1">{% block content %}{% endblock content %}</main>
+    {% include "partials/footer.html" %}
+  </div>
+  {% endblock body %}
+</body>
+</html>

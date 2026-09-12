@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Tags · {{ config.title }}{% endblock title %}
+{% block content %}
+<header class="catalog-heading">
+  <a class="small-link" href="{{ get_url(path='@/writing/_index.md') }}">← All writing</a>
+  <h1>Tags</h1>
+</header>
+<ul class="tag-index">
+  {% for term in terms %}
+  <li><a href="{{ term.permalink }}"><span><span class="tag-hash" aria-hidden="true">#</span>{{ term.name }}</span><span class="tag-count">{{ term.page_count }} {% if term.page_count == 1 %}post{% else %}posts{% endif %} →</span></a></li>
+  {% else %}
+  <li class="empty-state">Tags will appear here when the first post is published.</li>
+  {% endfor %}
+</ul>
+{% endblock content %}

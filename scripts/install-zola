@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ "$(uname -s)/$(uname -m)" != Linux/x86_64 ]]; then
+  echo 'This installer supports x86_64 Linux. See README.md for other platforms.' >&2
+  exit 1
+fi
+
+version="$(cat "$root/.zola-version")"
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'Invalid Zola version' >&2; exit 1; }
+asset="zola-v${version}-x86_64-unknown-linux-musl.tar.gz"
+checksum="$(awk -v asset="$asset" '$2 == asset {print $1}' "$root/.zola-checksums")"
+[[ "$checksum" =~ ^[a-f0-9]{64}$ ]] || { echo 'Missing pinned checksum' >&2; exit 1; }
+
+temporary="$(mktemp -d)"
+trap 'rm -rf -- "$temporary"' EXIT
+curl --fail --location --silent --show-error --retry 3 --proto '=https' --tlsv1.2 \
+  "https://github.com/getzola/zola/releases/download/v${version}/${asset}" \
+  --output "$temporary/$asset"
+(cd "$temporary" && printf '%s  %s\n' "$checksum" "$asset" | sha256sum --check --status)
+tar -xzf "$temporary/$asset" -C "$temporary" zola
+[[ "$("$temporary/zola" --version)" == "zola $version" ]]
+
+mkdir -p "$root/.tools"
+install -m 755 "$temporary/zola" "$root/.tools/zola.new"
+mv -f "$root/.tools/zola.new" "$root/.tools/zola"
+printf 'Installed Zola %s in .tools/zola\n' "$version"

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Writing · {{ config.title }}{% endblock title %}
+{% block content %}
+<header class="catalog-heading"><h1>Writing</h1>{{ <tag_index_link /> }}</header>
+<div>
+  {% for post in section.pages %}
+  <article class="writing-entry">
+    <time class="eyebrow" datetime="{{ post.date }}">{{ post.date | date(format="%d %B %Y") }}</time>
+    <h2><a href="{{ post.permalink }}">{{ post.title }}</a></h2>
+    <p>{{ post.description }}</p>
+    {{ <post_tags post={post} /> }}
+  </article>
+  {% else %}
+  <p class="empty-state">No published posts yet. You can follow the <a href="{{ get_url(path='atom.xml') }}">Atom feed</a> or look through my <a href="{{ config.extra.github }}">projects on GitHub</a>.</p>
+  {% endfor %}
+</div>
+{% endblock content %}

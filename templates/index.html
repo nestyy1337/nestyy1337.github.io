@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="index-topics"><span>Software engineering</span> <span aria-hidden="true">/</span> <span>Cybersecurity</span></h1>
+
+<section class="index-section" aria-labelledby="software-title">
+  <h2 id="software-title"><a href="{{ get_url(path='@/software/_index.md') }}">Software</a></h2>
+  <div class="index-section-content">
+    {% include "partials/projects.html" %}
+    <a class="browse-link" href="{{ get_url(path='@/software/_index.md') }}">All software →</a>
+  </div>
+</section>
+
+<section class="index-section" aria-labelledby="writing-title">
+  <h2 id="writing-title"><a href="{{ get_url(path='@/writing/_index.md') }}">Writing</a></h2>
+  <div class="index-section-content">
+    {% set writing = get_section(path="writing/_index.md") %}
+    {% for post in writing.pages %}
+    {% if loop.index <= 3 %}
+    <article class="writing-entry"><h3><a href="{{ post.permalink }}">{{ post.title }}</a></h3><p>{{ post.description }}</p>{{ <post_tags post={post} /> }}</article>
+    {% endif %}
+    {% else %}
+    <p class="empty-state">Nothing published yet.</p>
+    {% endfor %}
+    <a class="browse-link" href="{{ get_url(path='@/writing/_index.md') }}">All writing →</a>
+    {{ <tag_index_link label="By tag →" inline={true} /> }}
+  </div>
+</section>
+{% include "partials/pendulum.html" %}
+{% endblock content %}

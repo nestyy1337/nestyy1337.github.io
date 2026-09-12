@@ -1,0 +1,16 @@
+{% component post_tags(post) %}
+{% if post.taxonomies.tags %}
+<ul class="post-tags" aria-label="Article tags">
+  {% for tag in post.taxonomies.tags %}
+  <li><a href="{{ get_taxonomy_url(kind='tags', name=tag) }}" rel="tag"><span aria-hidden="true">#</span>{{ tag }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endcomponent post_tags %}
+
+{% component tag_index_link(label="Browse by tag →", inline=false) %}
+{% set tags = get_taxonomy(kind="tags", required=false) %}
+{% if tags and tags.items %}
+<a class="browse-link{% if inline %} browse-tags{% endif %}" href="{{ tags.permalink }}">{{ label }}</a>
+{% endif %}
+{% endcomponent tag_index_link %}

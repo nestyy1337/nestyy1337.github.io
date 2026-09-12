@@ -1,0 +1,18 @@
+{% component project_list(limit=0, heading_level=3) %}
+{% set catalog = load_data(path="data/software.toml") %}
+<div class="project-list">
+  {% for project in catalog.projects %}
+  {% if limit == 0 or loop.index <= limit %}
+  <article class="project">
+    {% if heading_level == 2 %}
+    <h2><a href="{{ project.repository }}">{{ project.name }} <span aria-hidden="true">↗</span></a></h2>
+    {% else %}
+    <h3><a href="{{ project.repository }}">{{ project.name }} <span aria-hidden="true">↗</span></a></h3>
+    {% endif %}
+    <p>{{ project.description }}</p>
+    <a class="small-link" href="{{ project.documentation }}">Documentation</a>
+  </article>
+  {% endif %}
+  {% endfor %}
+</div>
+{% endcomponent project_list %}

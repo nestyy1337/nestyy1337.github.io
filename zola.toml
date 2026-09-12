@@ -1,0 +1,25 @@
+base_url = "https://szymongluch.com"
+title = "Szymon Głuch"
+description = "Rust software, language design, and notes by Szymon Głuch."
+author = "Szymon Głuch"
+default_language = "en"
+compile_sass = false
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+build_search_index = false
+taxonomies = [{ name = "tags" }]
+
+[markdown]
+bottom_footnotes = true
+insert_anchor_links = "heading"
+
+[markdown.highlighting]
+style = "class"
+light_theme = "github-light"
+dark_theme = "github-dark-high-contrast"
+error_on_missing_language = true
+
+[extra]
+github = "https://github.com/nestyy1337"
+linkedin = "https://www.linkedin.com/in/szymon-g%C5%82uch-433177277"
+feed_created = "2026-09-12T00:00:00Z"

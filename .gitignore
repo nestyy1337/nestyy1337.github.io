@@ -1,0 +1,8 @@
+/public/
+/.preview/
+/.tools/
+/.qa/
+/.DS_Store
+
+__pycache__/
+*.py[cod]
