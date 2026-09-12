@@ -20,6 +20,13 @@ if [[ "$("$zola" --version)" != "$expected" ]]; then
   exit 1
 fi
 
+base_url="${SITE_BASE_URL:-$(python3 -c 'import tomllib; print(tomllib.load(open("zola.toml", "rb"))["base_url"])')}"
+
+build() {
+  "$zola" build --base-url "$base_url"
+  python3 scripts/check_output.py public "$base_url"
+}
+
 case "${1:-preview}" in
   preview)
     exec "$zola" serve --drafts --output-dir .preview --force --extra-watch-path data --port "${PORT:-1111}"
@@ -29,13 +36,12 @@ case "${1:-preview}" in
     ;;
   check)
     "$zola" check --skip-external-links
-    "$zola" build
-    python3 scripts/check_output.py public
+    build
     python3 scripts/check_articles.py "$zola"
+    node --test scripts/browser.test.cjs
     ;;
   build)
-    "$zola" build
-    python3 scripts/check_output.py public
+    build
     ;;
   *)
     printf 'Usage: ./scripts/site [preview|serve|check|build]\n' >&2

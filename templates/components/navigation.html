@@ -1,18 +1,9 @@
-{% component site_header(prototype=false) %}
+{% component site_header() %}
 <header class="index-header">
-  {% if prototype %}
-  <a class="index-signature" data-prototype-link href="{{ get_url(path='@/prototype/_index.md') }}" aria-label="Szymon Głuch, also nesty, home">Szymon Głuch <span class="index-alias">/ nesty</span></a>
-  {% else %}
   <a class="index-signature" href="{{ get_url(path='@/_index.md') }}" aria-label="Szymon Głuch, also nesty, home">Szymon Głuch <span class="index-alias">/ nesty</span></a>
-  {% endif %}
   <nav aria-label="Main navigation">
-    {% if prototype %}
-    <a data-prototype-link href="{{ get_url(path='@/prototype/software.md') }}">Software</a>
-    <a data-prototype-link href="{{ get_url(path='@/prototype/writing.md') }}">Writing</a>
-    {% else %}
     <a href="{{ get_url(path='@/software/_index.md') }}">Software</a>
     <a href="{{ get_url(path='@/writing/_index.md') }}">Writing</a>
-    {% endif %}
     <a href="{{ get_url(path='@/about.md') }}">About</a>
   </nav>
   <div class="index-tools">

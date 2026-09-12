@@ -1,4 +1,3 @@
-{# Local experiment. Still without JS; changes mood only on a new page load. #}
 <div class="index-afterword">
   <figure class="pendulum" data-mood="back" aria-label="Industry sentiment, a joke: we're so back">
     <figcaption>industry sentiment</figcaption>
@@ -14,4 +13,4 @@
     </svg>
   </figure>
 </div>
-<script>{% include "prototype/pendulum.js.html" %}</script>
+<script src="{{ get_url(path='js/pendulum.js') }}" defer></script>

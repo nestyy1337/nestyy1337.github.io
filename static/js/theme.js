@@ -4,14 +4,11 @@
   const storageKey = 'site-appearance';
   const system = window.matchMedia('(prefers-color-scheme: dark)');
   const valid = value => value === 'light' || value === 'dark';
-  let preference = root.dataset.appearance;
-
-  if (!valid(preference)) {
-    try {
-      preference = localStorage.getItem(storageKey);
-    } catch {
-      // Storage can be disabled. The switch still works for this page.
-    }
+  let preference;
+  try {
+    preference = localStorage.getItem(storageKey);
+  } catch {
+    // Storage can be disabled. The switch still works for this page.
   }
 
   function render() {
@@ -41,7 +38,6 @@
         }
 
         render();
-        document.dispatchEvent(new CustomEvent('appearancechange'));
       });
       button.hidden = false;
     }

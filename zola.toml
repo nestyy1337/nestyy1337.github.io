@@ -1,5 +1,4 @@
-# Local placeholder. Set the real base URL before publishing.
-base_url = "https://example.invalid"
+base_url = "https://nestyy1337.github.io"
 title = "Szymon Głuch"
 description = "Rust software, language design, and notes by Szymon Głuch."
 author = "Szymon Głuch"

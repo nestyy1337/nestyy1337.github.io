@@ -36,6 +36,16 @@ updated = 2026-09-10
 tags = ["rust", "language design"]
 +++
 A paragraph with **bold** and `Option<&str>`.
+
+## A heading
+
+[A local anchor](#a-heading) and a footnote.[^note]
+
+```rust
+fn main() { println!("hello"); }
+```
+
+[^note]: A fixture footnote.
 ''')
         (root / "content/writing/draft-test.md").write_text('''+++
 title = "draft-test-sentinel"
@@ -48,7 +58,7 @@ tags = ["draft-only-tag-sentinel"]
 draft-test-sentinel
 ''')
 
-        subprocess.run([str(zola), "-r", str(root), "build"], check=True)
+        subprocess.run([str(zola), "-r", str(root), "build", "--base-url", "https://example.invalid"], check=True)
         feed = ET.parse(root / "public/atom.xml").getroot()
         entries = feed.findall("a:entry", namespace)
         assert len(entries) == 1, "Only the published test article should be in the feed"
@@ -88,7 +98,7 @@ tags = ["rust"]
 Temporary article.
 ''')
 
-        subprocess.run([str(zola), "-r", str(root), "build"], check=True)
+        subprocess.run([str(zola), "-r", str(root), "build", "--base-url", "https://example.invalid"], check=True)
         home = (root / "public/index.html").read_text()
         software = (root / "public/software/index.html").read_text()
         writing = (root / "public/writing/index.html").read_text()
@@ -105,6 +115,21 @@ Temporary article.
         assert "Recent article fixture" not in language
         assert 'rel="tag"' in home and 'rel="tag"' in writing
         check_output(root / "public")
+
+        # Both a root domain and project-site base paths must be deployable.
+        for base_url in ("https://site.example", "https://site.example/blog"):
+            subprocess.run([str(zola), "-r", str(root), "build", "--base-url", base_url], check=True)
+            check_output(root / "public", base_url)
+
+        # Verify that the checker really detects a broken local URL under a prefix.
+        home_path = root / "public/index.html"
+        home_path.write_text(home_path.read_text().replace('/blog/css/layout.css', '/blog/css/missing.css'))
+        try:
+            check_output(root / "public", "https://site.example/blog")
+        except SystemExit as error:
+            assert "Broken local link" in str(error)
+        else:
+            raise AssertionError("The output checker accepted a broken asset URL")
 
     print("Content checks passed: feeds, draft/tag exclusion, filtered tag archives and homepage limits.")
 
