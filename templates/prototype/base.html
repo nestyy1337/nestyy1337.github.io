@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block variant %}C{% endblock variant %}
+{% block head %}
+{% if config.mode == "serve" %}
+  <style>{% include "prototype/directions.css.html" %}</style>
+  <script>{% include "prototype/initial-state.js.html" %}</script>
+{% endif %}
+{% endblock head %}
+{% block body %}
+{% if config.mode == "serve" %}
+  {% block experiment %}{% endblock experiment %}
+  {% include "prototype/switcher.html" %}
+  <script>{% include "prototype/switcher.js.html" %}</script>
+{% else %}
+  <main id="main"><h1>Local prototype only</h1><p>This page must not be published.</p></main>
+{% endif %}
+{% endblock body %}

@@ -1,0 +1,10 @@
+/public/
+/.preview/
+/.tools/
+/.qa/
+/.DS_Store
+
+# Private writing belongs outside this repository, not just in an ignored folder.
+
+__pycache__/
+*.py[cod]

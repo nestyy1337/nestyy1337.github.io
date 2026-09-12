@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ term.name }} · {{ config.title }}{% endblock title %}
+{% block content %}
+<header class="catalog-heading">
+  <a class="small-link" href="{{ get_url(path='tags/') }}">← All tags</a>
+  <h1><span class="tag-hash" aria-hidden="true">#</span>{{ term.name }}</h1>
+  <p>{{ term.page_count }} {% if term.page_count == 1 %}post{% else %}posts{% endif %}</p>
+</header>
+{% for post in term.pages %}
+<article class="writing-entry">
+  {% if post.date %}<time class="eyebrow" datetime="{{ post.date }}">{{ post.date | date(format="%d %B %Y") }}</time>{% endif %}
+  <h2><a href="{{ post.permalink }}">{{ post.title }}</a></h2>
+  <p>{{ post.description }}</p>
+  {{ <post_tags post={post} /> }}
+</article>
+{% endfor %}
+{% endblock content %}

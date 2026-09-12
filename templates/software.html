@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Software · {{ config.title }}{% endblock title %}
+{% block content %}
+<header class="catalog-heading"><h1>Software</h1><p>Rust libraries. Source and documentation below.</p></header>
+<div class="software-catalog">{{ <project_list heading_level={2} /> }}</div>
+{% endblock content %}

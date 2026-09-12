@@ -1,0 +1,17 @@
+{# Local experiment. Still without JS; changes mood only on a new page load. #}
+<div class="index-afterword">
+  <figure class="pendulum" data-mood="back" aria-label="Industry sentiment, a joke: we're so back">
+    <figcaption>industry sentiment</figcaption>
+    <svg viewBox="0 0 300 144" aria-hidden="true" focusable="false">
+      <path class="pendulum-arc" d="M 65 78 Q 150 156 235 78" />
+      <path class="pendulum-tick" d="M 59 78 L 65 78 L 65 84 M 229 78 L 235 78 L 235 84" />
+      <path class="pendulum-mount" d="M 138 17 H 162 M 143 12 V 17 M 150 12 V 17 M 157 12 V 17" />
+      <g class="pendulum-arm pendulum-over"><path d="M 150 20 L 65 78"/><circle cx="65" cy="78" r="9"/></g>
+      <g class="pendulum-arm pendulum-back"><path d="M 150 20 L 235 78"/><circle cx="235" cy="78" r="9"/></g>
+      <circle class="pendulum-pivot" cx="150" cy="20" r="3"/>
+      <text class="pendulum-label label-over" x="57" y="127" text-anchor="middle">it's so over</text>
+      <text class="pendulum-label label-back" x="239" y="127" text-anchor="middle">we're so back</text>
+    </svg>
+  </figure>
+</div>
+<script>{% include "prototype/pendulum.js.html" %}</script>

@@ -1,0 +1,77 @@
+// Throwaway layout controls. Appearance uses the real header switch.
+(() => {
+  const variants = ['A', 'B', 'C'];
+  const names = { A: 'Editorial', B: 'Notebook', C: 'Index' };
+  const appearances = ['system', 'light', 'dark'];
+  const root = document.documentElement;
+  const label = document.querySelector('.prototype-current');
+
+  function render() {
+    const params = new URLSearchParams(location.search);
+    const variant = variants.includes(params.get('variant')) ? params.get('variant') : 'C';
+    const appearance = appearances.includes(params.get('appearance')) ? params.get('appearance') : 'system';
+
+    root.dataset.variant = variant;
+    root.dataset.previewView = params.get('view') === 'clean' ? 'clean' : 'controls';
+    label.textContent = `${variant} · ${names[variant]}`;
+
+    for (const design of document.querySelectorAll('[data-design]')) {
+      design.hidden = design.dataset.design !== variant;
+    }
+
+    const skipLink = document.querySelector('.skip-link');
+    skipLink.href = document.querySelector('[data-design]') ? `#main-${variant.toLowerCase()}` : '#main';
+
+    for (const link of document.querySelectorAll('[data-prototype-link]')) {
+      const url = new URL(link.href);
+      url.searchParams.set('variant', variant);
+      if (appearance === 'system') url.searchParams.delete('appearance');
+      else url.searchParams.set('appearance', appearance);
+      if (root.dataset.previewView === 'clean') url.searchParams.set('view', 'clean');
+      else url.searchParams.delete('view');
+      link.href = url.href;
+    }
+  }
+
+  function setParam(key, value) {
+    const url = new URL(location.href);
+    url.searchParams.set(key, value);
+    history.replaceState(null, '', url);
+    render();
+  }
+
+  function cycle(step) {
+    const index = variants.indexOf(root.dataset.variant);
+    setParam('variant', variants[(index + step + variants.length) % variants.length]);
+  }
+
+  for (const button of document.querySelectorAll('[data-step]')) {
+    button.addEventListener('click', () => cycle(Number(button.dataset.step)));
+  }
+
+  document.addEventListener('appearancechange', () => {
+    const url = new URL(location.href);
+    url.searchParams.delete('appearance');
+    history.replaceState(null, '', url);
+    render();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const editing = event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), pre, [role="textbox"]');
+    if (editing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      cycle(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  });
+
+  // Focusable code blocks can be scrolled by keyboard without switching variants.
+  for (const block of document.querySelectorAll('.prose pre')) {
+    block.tabIndex = 0;
+    block.setAttribute('aria-label', 'Code example, horizontally scrollable');
+  }
+
+  window.addEventListener('popstate', render);
+  render();
+})();
