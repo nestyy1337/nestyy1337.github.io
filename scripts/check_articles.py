@@ -130,7 +130,7 @@ Temporary article.
         writing = (root / "public/writing/index.html").read_text()
         assert "third-library-fixture" in software
         assert "third-library-fixture" not in home
-        assert home.count('class="project"') == 2
+        assert home.count('class="project"') == 4
         assert home.count('class="writing-entry"') == 3
         assert writing.count('class="writing-entry"') == 4
 
