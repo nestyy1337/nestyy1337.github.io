@@ -1,16 +1,4 @@
 [[projects]]
-name = "serde_rison"
-description = "Serde support for RISON, a compact format for structured data in URLs."
-repository = "https://github.com/nestyy1337/serde_rison"
-documentation = "https://docs.rs/serde_rison"
-
-[[projects]]
-name = "sdp-request-client"
-description = "An async Rust client for the ManageEngine ServiceDesk Plus API."
-repository = "https://github.com/nestyy1337/sdp-request-client"
-documentation = "https://docs.rs/sdp-request-client"
-
-[[projects]]
 name = "security-client-rs"
 description = "An async Rust client for the Kibana security and Fleet APIs."
 repository = "https://github.com/nestyy1337/security-client-rs"
@@ -21,3 +9,15 @@ name = "kibana-dashboard-export"
 description = "Free PNG and PDF exports of Kibana dashboards, without Elastic Reporting."
 repository = "https://github.com/nestyy1337/kibana-dashboard-export"
 documentation = "https://github.com/nestyy1337/kibana-dashboard-export#readme"
+
+[[projects]]
+name = "serde_rison"
+description = "Serde support for RISON, a compact format for structured data in URLs."
+repository = "https://github.com/nestyy1337/serde_rison"
+documentation = "https://docs.rs/serde_rison"
+
+[[projects]]
+name = "sdp-request-client"
+description = "An async Rust client for the ManageEngine ServiceDesk Plus API."
+repository = "https://github.com/nestyy1337/sdp-request-client"
+documentation = "https://docs.rs/sdp-request-client"
